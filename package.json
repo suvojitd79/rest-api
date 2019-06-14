@@ -4,7 +4,7 @@
   "description": "REST service that can fetch bank details",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "SUVOJIT DAS",
   "license": "ISC",
