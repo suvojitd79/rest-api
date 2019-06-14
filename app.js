@@ -16,10 +16,17 @@ client
 //get the response-object
 const res_status = require("./responses");
 
-//get the controller
+//get the details_router
 const details_route = require("./routes/details");
 
+//get the token_router
+const token_route = require("./routes/token");
+
+//authenticate the jwt key
+const jwtValidate = require("./auth/jwt");
+
 /**
+ *  
  *  http method: GET
     /details?query_params....
  *  Get the primary information about bank details by
@@ -29,7 +36,22 @@ const details_route = require("./routes/details");
  *    /details?bname=xyz&city=xc1
  */
 
-app.use("/details", details_route);
+//private route, jwt protected
+app.use("/details", jwtValidate.isValidJWT, details_route);
+
+/**
+ *  http method: GET
+ *  /token
+ *  Get the token for authenticated user
+ *
+ */
+
+app.use("/token", token_route);
+
+//home page
+app.get("/", (req, res) => {
+  res.status(200).json({ msg: "welcome to the home page" });
+});
 
 //exception for invalid api request
 app.get("*", (req, res) => {

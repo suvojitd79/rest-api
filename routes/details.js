@@ -14,7 +14,16 @@ const client = require("../db/connection");
  *    /details?bname=xyz&city=xc1
  */
 
+//private route
 routeDetails.get("/", async (req, res) => {
+  //default params
+  var limit = null;
+  var offset = 0;
+
+  if (req.query.hasOwnProperty("limit")) limit = req.query.limit;
+
+  if (req.query.hasOwnProperty("offset")) offset = req.query.offset;
+
   if (req.query.hasOwnProperty("ifsc")) {
     /*  Get the primary information about bank details by
      *  1. branch IFSC code
@@ -26,9 +35,15 @@ routeDetails.get("/", async (req, res) => {
 
     //valid request
     client.query(
-      "select * from branches where ifsc=$1",
-      [req.query.ifsc],
+      "select * from branches where ifsc=$1 order by id limit $2 offset $3",
+      [req.query.ifsc, limit, offset],
       (error, result) => {
+        if (error)
+          return res.status(400).json({
+            msg: error.name,
+            code: error.code,
+            routine: error.routine
+          });
         if (result.rowCount > 0) return res.json(result.rows[0]);
         else return res.json({});
       }
@@ -51,9 +66,15 @@ routeDetails.get("/", async (req, res) => {
 
     //valid request
     client.query(
-      "select * from branches inner join banks on branches.bank_id=banks.id where branches.city=$1 and banks.name=$2",
-      [req.query.city, req.query.bname],
+      "select * from branches inner join banks on branches.bank_id=banks.id where branches.city=$1 and banks.name=$2 order by branches.id limit $3 offset $4",
+      [req.query.city, req.query.bname, limit, offset],
       (error, result) => {
+        if (error)
+          return res.status(400).json({
+            msg: error.name,
+            code: error.code,
+            routine: error.routine
+          });
         if (result.rowCount > 0) return res.json(result.rows);
         else return res.json({});
       }
