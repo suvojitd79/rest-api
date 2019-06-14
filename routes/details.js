@@ -35,7 +35,7 @@ routeDetails.get("/", async (req, res) => {
 
     //valid request
     client.query(
-      "select * from branches where ifsc=$1 order by id limit $2 offset $3",
+      "select * from branches inner join banks on branches.bank_id=banks.id where ifsc=$1 order by banks.id limit $2 offset $3",
       [req.query.ifsc, limit, offset],
       (error, result) => {
         if (error)
