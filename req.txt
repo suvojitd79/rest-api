@@ -1,0 +1,12 @@
+Essentials your applications should have: 
+    use PostgreSQL as a backend database
+    GET API to fetch a bank details, given branch IFSC code
+    GET API to fetch all details of branches, given bank name and a city 
+    each API should support limit & offset parameters
+    APIs should be authenticated using a JWT key, with validity = 5 days
+
+Deliverables: 
+    Hosting URL 
+    Github repo link to your solution
+    please include a curl script that can make the API call (which includes the JWT key) in your repo
+    Time taken to complete this exercise
