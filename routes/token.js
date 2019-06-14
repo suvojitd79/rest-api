@@ -1,8 +1,9 @@
 const token = require("../auth/jwt");
 const routeToken = require("express").Router();
 
-routeToken.get("/", (req, res) => {
-  res.status(200).json({ token: token.getKey(), expiresIn: "5 days" });
+routeToken.get("/", async (req, res) => {
+  const key = await token.getKey();
+  res.status(200).json({ token: key, expiresIn: "5 days" });
 });
 
 module.exports = routeToken;
